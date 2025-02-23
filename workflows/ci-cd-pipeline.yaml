@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: mlops-ci-cd-
+spec:
+  entrypoint: main
+  templates:
+  - name: main
+    steps:
+    - - name: train-model
+        template: train-model
+    - - name: deploy-model
+        template: deploy-model
+
+  - name: train-model
+    container:
+      image: python:3.8
+      command: [python, src/model_training/train_model.py]
+
+  - name: deploy-model
+    container:
+      image: kubectl:latest
+      command: [kubectl, apply, -f, manifests/model-serving.yaml]

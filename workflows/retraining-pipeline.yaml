@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: mlops-retraining-
+spec:
+  entrypoint: main
+  templates:
+  - name: main
+    steps:
+    - - name: monitor-model
+        template: monitor-model
+    - - name: retrain-model
+        template: retrain-model
+
+  - name: monitor-model
+    container:
+      image: python:3.8
+      command: [python, src/monitoring/monitor_model.py]
+
+  - name: retrain-model
+    container:
+      image: python:3.8
+      command: [python, src/model_training/train_model.py]

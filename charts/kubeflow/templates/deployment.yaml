@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubeflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubeflow
+  template:
+    metadata:
+      labels:
+        app: kubeflow
+    spec:
+      containers:
+      - name: kubeflow
+        image: kubeflow/kubeflow:latest
+        ports:
+        - containerPort: 8080
